@@ -1,0 +1,39 @@
+services:
+  redis: # step 1
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    
+    container_name: sus_redis
+
+  web_0807: # step 2
+    build: 
+      context: .
+    image: flask_app
+    ports:
+      - "80:8763"
+    command: gunicorn --bind 0.0.0.0:8763 app:app --preload
+    depends_on:
+      - redis
+
+    environment:
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+
+    container_name: sus_web  
+
+
+  worker: # step 3
+    image: flask_app
+    command: celery -A tasks.celery_app worker --loglevel=info
+    environment:
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+
+    depends_on:
+      - redis
+      - web_0807
+
+    container_name: suselery
+  
+  

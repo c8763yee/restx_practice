@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-restx = "*"
+redis = "*"
+eventlet = "*"
+celery = {version = "*", extras = ["redis"]}
+pytest = "*"
+coverage = "*"
+pytest-celery = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

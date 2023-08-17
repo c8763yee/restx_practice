@@ -1,0 +1,7 @@
+flask
+flask-restx
+celery[redis]
+redis
+eventlet
+pytest-cov
+gunicorn
